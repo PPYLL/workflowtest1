@@ -6,8 +6,6 @@
 name: MSBuild
 
 on:
-  push:
-    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
@@ -41,14 +39,7 @@ jobs:
       working-directory: ${{env.GITHUB_WORKSPACE}}
       # Add additional options to the MSBuild command line here (like platform or verbosity level).
       # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
-      run: |
-          msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
-          echo "env.BUILD_CONFIGURATION is:"
-          echo {env.BUILD_CONFIGURATION}
-          echo "env.SOLUTION_FILE_PATH is:"
-          echo {env.SOLUTION_FILE_PATH}
-          echo "env.GITHUB_WORKSPACE is:"
-          echo {env.GITHUB_WORKSPACE}
+      run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
     - name: upload__artifact
       uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
       with:
