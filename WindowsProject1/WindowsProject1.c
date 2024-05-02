@@ -197,7 +197,7 @@ int ProcessCallBack(DWORD pid){
 }
 
 int main(){
-    printf("oldLoadLibraryA::%p\n"(PTHREAD_START_ROUTINE)GetProcAddress(GetModuleHandle("kernel32.dll"), "LoadLibraryA"));
+    printf("oldLoadLibraryA::%p\n",(PTHREAD_START_ROUTINE)GetProcAddress(GetModuleHandle("kernel32.dll"), "LoadLibraryA"));
     EnumProcessA("explorer.exe");
     getchar();
     return 0;
