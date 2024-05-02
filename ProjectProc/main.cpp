@@ -144,10 +144,10 @@ int ProcessCallBack(DWORD pid){
     HANDLE hprocess=OpenProcess(PROCESS_CREATE_THREAD | PROCESS_QUERY_INFORMATION | PROCESS_VM_OPERATION | PROCESS_VM_WRITE | PROCESS_VM_READ, FALSE, pid);
 	if (!hprocess) {
 		puts("OpenProcess error\n");
-		return;
+		return 0;
 	}
     //将自己进程中的LoadLibary写入目标进程
-    LPVOID pLoadLibaryAddress = (PTHREAD_START_ROUTINE)GetProcAddress(GetModuleHandle("kernel32.dll"), "LoadLibraryA");
+    LPVOID pLoadLibaryAddress = (PTHREAD_START_ROUTINE)GetProcAddress(GetModuleHandleA("kernel32.dll"), "LoadLibraryA");
     
     DWORD size=1000;//暂时写死，需要更改(TODO)
     
@@ -178,7 +178,7 @@ int ProcessCallBack(DWORD pid){
 		}
         
     //开始创建远线程
-	Fn_ZwCreateThreadEx ZwCreateThreadEx = (Fn_ZwCreateThreadEx)GetProcAddress(LoadLibrary("ntdll.dll"), "ZwCreateThreadEx");
+	Fn_ZwCreateThreadEx ZwCreateThreadEx = (Fn_ZwCreateThreadEx)GetProcAddress(LoadLibraryA("ntdll.dll"), "ZwCreateThreadEx");
 	if (NULL == ZwCreateThreadEx)
 	{
 		printf("GetProcAddress error\n");
@@ -197,7 +197,7 @@ int ProcessCallBack(DWORD pid){
 }
 
 int main(){
-    printf("oldLoadLibraryA::%p\n",(PTHREAD_START_ROUTINE)GetProcAddress(GetModuleHandle("kernel32.dll"), "LoadLibraryA"));
+    printf("oldLoadLibraryA::%p\n",(PTHREAD_START_ROUTINE)GetProcAddress(GetModuleHandleA("kernel32.dll"), "LoadLibraryA"));
     EnumProcessA("explorer.exe");
     getchar();
     return 0;
