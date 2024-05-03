@@ -7,62 +7,46 @@
 #pragma comment(lib, "libMinHook.x86.lib")
 #endif
 
-typedef int (WINAPI *MESSAGEBOXW)(HWND, LPCWSTR, LPCWSTR, UINT);
+typedef int (WINAPI *OldMessageBoxA)(HWND hWnd, LPCSTR lpText, LPCSTR lpCaption, UINT uType);
 
-// Pointer for calling original MessageBoxW.
-MESSAGEBOXW fpMessageBoxW = NULL;
+OldMessageBoxA fpMessageBoxA = NULL;
 
-// Detour function which overrides MessageBoxW.
-int WINAPI DetourMessageBoxW(HWND hWnd, LPCWSTR lpText, LPCWSTR lpCaption, UINT uType)
+// 自定义弹窗
+int WINAPI MyMessageBoxA(HWND hWnd, LPCSTR lpText, LPCSTR lpCaption, UINT uType)
 {
-    return fpMessageBoxW(hWnd, L"Hooked!", lpCaption, uType);
+  int ret = fpMessageBoxA(hWnd, "Hook Inject hello lyshark", lpCaption, uType);
+  return ret;
 }
 
-int main()
+// 安装钩子
+void SetHook()
 {
-    // Initialize MinHook.
-    if (MH_Initialize() != MH_OK)
-    {
-        return 1;
-    }
+  if (MH_Initialize() == MB_OK)
+  {
+    MH_CreateHook(&MessageBoxA, &MyMessageBoxA, reinterpret_cast<void**>(&fpMessageBoxA));
+    MH_EnableHook(&MessageBoxA);
+  }
+}
 
-    // Create a hook for MessageBoxW, in disabled state.
-    if (MH_CreateHook(&MessageBoxW, &DetourMessageBoxW, 
-        reinterpret_cast<LPVOID*>(&fpMessageBoxW)) != MH_OK)
-    {
-        return 1;
-    }
+// 卸载钩子
+void UnHook()
+{
+  if (MH_DisableHook(&MessageBoxA) == MB_OK)
+  {
+    MH_Uninitialize();
+  }
+}
 
-    // or you can use the new helper function like this.
-    //if (MH_CreateHookApiEx(
-    //    L"user32", "MessageBoxW", &DetourMessageBoxW, &fpMessageBoxW) != MH_OK)
-    //{
-    //    return 1;
-    //}
-
-    // Enable the hook for MessageBoxW.
-    if (MH_EnableHook(&MessageBoxW) != MH_OK)
-    {
-        return 1;
-    }
-
-    // Expected to tell "Hooked!".
-    MessageBoxW(NULL, L"Not hooked...", L"MinHook Sample", MB_OK);
-
-    // Disable the hook for MessageBoxW.
-    if (MH_DisableHook(&MessageBoxW) != MH_OK)
-    {
-        return 1;
-    }
-
-    // Expected to tell "Not hooked...".
-    MessageBoxW(NULL, L"Not hooked...", L"MinHook Sample", MB_OK);
-
-    // Uninitialize MinHook.
-    if (MH_Uninitialize() != MH_OK)
-    {
-        return 1;
-    }
-
-    return 0;
+BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
+{
+  switch (ul_reason_for_call)
+  {
+  case DLL_PROCESS_ATTACH:
+    SetHook();
+    break;
+  case DLL_PROCESS_DETACH:
+    UnHook();
+    break;
+  }
+  return TRUE;
 }
