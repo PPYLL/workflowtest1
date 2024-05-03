@@ -40,9 +40,10 @@ jobs:
       # Add additional options to the MSBuild command line here (like platform or verbosity level).
       # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
       #x64
-      run: msbuild /m /p:Configuration=Release;Platform=x64 ${{env.SOLUTION_FILE_PATH}}
+      run: |
+           msbuild /m /p:Configuration=Release;Platform=x64 ${{env.SOLUTION_FILE_PATH}}
       #x86
-      run: msbuild /m /p:Configuration=Release;Platform=x86 ${{env.SOLUTION_FILE_PATH}}
+           msbuild /m /p:Configuration=Release;Platform=x86 ${{env.SOLUTION_FILE_PATH}}
     - name: upload__artifact
       uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
       with:
