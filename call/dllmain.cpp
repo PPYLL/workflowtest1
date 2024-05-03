@@ -2,9 +2,9 @@
 #include "MinHook.h"
 
 #if defined _M_X64
-#pragma comment(lib, "libMinHook-x64-v120-md.lib")
+#pragma comment(lib, "libMinHook-x64-v141-md.lib")
 #elif defined _M_IX86
-#pragma comment(lib, "libMinHook-x86-v120-md.lib")
+#pragma comment(lib, "libMinHook-x86-v141-md.lib")
 #endif
 
 typedef int (WINAPI *OldMessageBoxA)(HWND hWnd, LPCSTR lpText, LPCSTR lpCaption, UINT uType);
