@@ -28,12 +28,16 @@ jobs:
     steps:
     #- uses: actions/checkout@v4
 
-    - name: unzip
+    - name: download
       run: |
            New-Item -ItemType Directory -Path "D:\a\1"
            Invoke-WebRequest -Uri "https://raw.githubusercontent.com/x500x/zip_unzipTest/main/unzip.exe" -OutFile "D:\a\unzip.exe"
            Invoke-WebRequest -Uri "https://raw.githubusercontent.com/x500x/workflowtest1/main/Detours-main.zip" -OutFile "D:\a\1.zip"
-           D:\a\unzip.exe -o 1.zip
+
+    - name: upload__artifact
+      uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+      with:
+       path: ${{env.SOLUTION_FILE_PATH}}
            
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v2
