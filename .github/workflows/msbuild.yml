@@ -26,13 +26,13 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v4
+    #- uses: actions/checkout@v4
 
     - name: unzip
       run: |
            New-Item -ItemType Directory -Path "D:\a\1"
-           Invoke-WebRequest -Uri "https://github.com/x500x/zip_unzipTest/blob/main/unzip.exe" -OutFile "D:\a\unzip.exe"
-           Invoke-WebRequest -Uri "https://github.com/x500x/workflowtest1/blob/main/Detours-main.zip" -OutFile "D:\a\1.zip"
+           Invoke-WebRequest -Uri "https://raw.githubusercontent.com/x500x/zip_unzipTest/main/unzip.exe" -OutFile "D:\a\unzip.exe"
+           Invoke-WebRequest -Uri "https://raw.githubusercontent.com/x500x/workflowtest1/blob/main/Detours-main.zip" -OutFile "D:\a\1.zip"
            D:\a\unzip.exe -o 1.zip -d ${{env.GITHUB_WORKSPACE}}
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v2
