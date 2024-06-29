@@ -11,7 +11,7 @@ on:
 
 env:
   # Path to the solution file relative to the root of the project.
-  SOLUTION_FILE_PATH: D:\a\1
+  SOLUTION_FILE_PATH: D:\a\1\Detours-main\vc
 
   # Configuration type to build.
   # You can convert this to a build matrix if you need coverage of multiple configuration types.
@@ -34,10 +34,7 @@ jobs:
            Invoke-WebRequest -Uri "https://raw.githubusercontent.com/x500x/zip_unzipTest/main/unzip.exe" -OutFile "D:\a\unzip.exe"
            Invoke-WebRequest -Uri "https://raw.githubusercontent.com/x500x/workflowtest1/main/Detours-main.zip" -OutFile "D:\a\1.zip"
            D:\a\unzip.exe -o D:\a\1.zip -d D:\a\1
-    - name: upload__artifact
-      uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
-      with:
-       path: ${{env.SOLUTION_FILE_PATH}}
+  
        
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v2
